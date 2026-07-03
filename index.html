@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naos</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    background:linear-gradient(#040814,#07142c,#0b1f3d);
+    font-family:Georgia, serif;
+}
+
+/* ================= LUNE ================= */
+
+.lune{
+    position:absolute;
+    top:70px;
+    right:120px;
+
+    width:110px;
+    height:110px;
+
+    background: radial-gradient(circle at 30% 30%, #fff6d6, #f2e6b8);
+    border-radius:50%;
+
+    box-shadow:
+        0 0 40px rgba(255,255,210,.35),
+        0 0 80px rgba(255,255,210,.15);
+}
+
+/* ================= ETOILES ================= */
+
+.etoile{
+    position:absolute;
+    border-radius:50%;
+    background:white;
+    animation:scintille infinite ease-in-out;
+}
+
+/* étoiles normales */
+.etoile.normal{
+    width:3px;
+    height:3px;
+    opacity:.35;
+    box-shadow:0 0 5px white;
+}
+
+/* étoiles importantes (cliquables) */
+.etoile.cliquable{
+    width:6px;
+    height:6px;
+    opacity:1;
+    box-shadow:0 0 12px white;
+    cursor:pointer;
+}
+
+/* scintillement */
+@keyframes scintille{
+    0%{opacity:.2; transform:scale(1);}
+    50%{opacity:1; transform:scale(1.6);}
+    100%{opacity:.3; transform:scale(1);}
+}
+
+/* ================= POPUP ================= */
+
+.popup{
+    display:none;
+
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+
+    width:500px;
+    max-width:85%;
+
+    padding:30px;
+
+    background:rgba(10,20,40,.75);
+    backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:18px;
+
+    color:white;
+    text-align:center;
+    line-height:1.8;
+
+    box-shadow:0 0 40px rgba(255,255,255,.1);
+    z-index:100;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* ================= NUAGE ================= */
+
+.nuage{
+    position:absolute;
+    width:200px;
+    height:60px;
+    background:rgba(255,255,255,.05);
+    border-radius:50%;
+    filter:blur(12px);
+    animation:bouge 60s linear infinite;
+}
+
+@keyframes bouge{
+    0%{transform:translateX(-200px);}
+    100%{transform:translateX(120vw);}
+}
+
+/* ================= ETOILE FILANTE ================= */
+
+.filante{
+    position:absolute;
+    width:120px;
+    height:2px;
+    background:linear-gradient(to right, white, transparent);
+    transform:rotate(20deg);
+    opacity:0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="lune"></div>
+
+<div class="popup" id="popup">
+
+<h2>Premier poème</h2>
+<p>
+Ici apparaîtra ton poème.<br><br>
+Chaque étoile peut devenir un texte.
+</p>
+
+<button onclick="fermer()">Fermer</button>
+
+</div>
+
+<script>
+
+/* ================= ETOILES NORMALES ================= */
+
+for(let i=0;i<60;i++){
+
+    let star=document.createElement("div");
+    star.classList.add("etoile","normal");
+
+    star.style.top=Math.random()*100+"vh";
+    star.style.left=Math.random()*100+"vw";
+
+    star.style.animationDuration=(Math.random()*3+2)+"s";
+
+    document.body.appendChild(star);
+}
+
+/* ================= ETOILES CLIQUABLES ================= */
+
+for(let i=0;i<4;i++){
+
+    let star=document.createElement("div");
+    star.classList.add("etoile","cliquable");
+
+    star.style.top=(20+i*18)+"vh";
+    star.style.left=(25+i*18)+"vw";
+
+    star.onclick=ouvrir;
+
+    document.body.appendChild(star);
+}
+
+/* ================= POPUP ================= */
+
+function ouvrir(){
+    document.getElementById("popup").style.display="block";
+}
+
+function fermer(){
+    document.getElementById("popup").style.display="none";
+}
+
+/* ================= NUAGE ================= */
+
+function creerNuage(){
+
+    let n=document.createElement("div");
+    n.classList.add("nuage");
+
+    n.style.top=Math.random()*60+"vh";
+    n.style.animationDuration=(40+Math.random()*40)+"s";
+
+    document.body.appendChild(n);
+
+}
+
+for(let i=0;i<4;i++) creerNuage();
+
+/* ================= ETOILE FILANTE ================= */
+
+function filante(){
+
+    let f=document.createElement("div");
+    f.classList.add("filante");
+
+    f.style.top=Math.random()*50+"vh";
+    f.style.left="-150px";
+
+    document.body.appendChild(f);
+
+    setTimeout(()=>{
+        f.style.transition="2s linear";
+        f.style.transform="translateX(120vw) rotate(20deg)";
+        f.style.opacity="1";
+    },100);
+
+    setTimeout(()=>f.remove(),2500);
+
+}
+
+setInterval(filante,20000);
+
+</script>
+
+</body>
+</html>
