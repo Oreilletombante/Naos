@@ -1,189 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naos</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naos</title>
 
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    height:100vh;
-    overflow:hidden;
-    background: radial-gradient(circle at top, #0b1f3d, #040814 70%, #02040a);
-    font-family:Georgia, serif;
-}
-
-/* ================= LUNE ================= */
-
-.lune{
-    position:absolute;
-    top:70px;
-    right:120px;
-
-    width:110px;
-    height:110px;
-
-    background: radial-gradient(circle at 30% 30%, #fff6d6, #f2e6b8);
-    border-radius:50%;
-
-    box-shadow:
-        0 0 40px rgba(255,255,210,.35),
-        0 0 80px rgba(255,255,210,.15);
-}
-
-/* ================= ETOILES ================= */
-
-.etoile{
-    position:absolute;
-    border-radius:50%;
-    background:white;
-}
-
-/* étoiles normales */
-.etoile.normal{
-    width:2px;
-    height:2px;
-    opacity:.25;
-    box-shadow:0 0 4px white;
-}
-
-/* étoiles poèmes */
-.etoile.poeme{
-    width:7px;
-    height:7px;
-    opacity:1;
-    box-shadow:0 0 18px white;
-    cursor:pointer;
-    animation:scintille 2.5s infinite ease-in-out;
-    transition:background 0.6s, box-shadow 0.6s, transform 0.3s;
-}
-
-/* ⭐ état "déjà lu" */
-.etoile.poeme.lu{
-    background:#d8a0a0;            /* rouge pastel */
-    box-shadow:0 0 15px #d8a0a0;
-}
-
-/* hover */
-.etoile.poeme:hover{
-    transform:scale(1.4);
-}
-
-/* scintillement */
-@keyframes scintille{
-    0%{opacity:.6;}
-    50%{opacity:1;}
-    100%{opacity:.6;}
-}
-
-/* ================= POPUP ================= */
-
-.popup{
-    display:none;
-
-    position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-
-    width:500px;
-    max-width:85%;
-
-    padding:30px;
-
-    background:rgba(10,20,40,.75);
-    backdrop-filter:blur(10px);
-
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:18px;
-
-    color:white;
-    text-align:center;
-    line-height:1.8;
-
-    box-shadow:0 0 40px rgba(255,255,255,.1);
-    z-index:100;
-}
-
-button{
-    margin-top:20px;
-    padding:10px 20px;
-    border:none;
-    border-radius:20px;
-    cursor:pointer;
-}
-
-</style>
-
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="lune"></div>
+    <!-- Lune -->
+    <div class="lune"></div>
 
-<div class="popup" id="popup">
+    <!-- Fenêtre du poème -->
+    <div class="popup" id="popup">
 
-<h2>Premier poème</h2>
-<p>
-Ici apparaîtra ton poème.<br><br>
-Chaque étoile peut devenir un texte.
-</p>
+        <h2 id="titre-poeme"></h2>
 
-<button onclick="fermer()">Fermer</button>
+        <p id="texte-poeme"></p>
 
-</div>
+        <button onclick="fermer()">Fermer</button>
 
-<script>
+    </div>
 
-/* ================= ETOILES FOND ================= */
+    <!-- Les poèmes -->
+    <script src="poemes.js"></script>
 
-for(let i=0;i<90;i++){
-
-    let star=document.createElement("div");
-    star.classList.add("etoile","normal");
-
-    star.style.top=Math.random()*100+"vh";
-    star.style.left=Math.random()*100+"vw";
-
-    document.body.appendChild(star);
-}
-
-/* ================= ETOILES POEMES ================= */
-
-for(let i=0;i<4;i++){
-
-    let star=document.createElement("div");
-    star.classList.add("etoile","poeme");
-
-    star.style.top=(20+i*18)+"vh";
-    star.style.left=(25+i*18)+"vw";
-
-    star.onclick=function(){
-        ouvrir();
-        star.classList.add("lu"); // ⭐ devient rouge après clic
-    };
-
-    document.body.appendChild(star);
-}
-
-/* ================= POPUP ================= */
-
-function ouvrir(){
-    document.getElementById("popup").style.display="block";
-}
-
-function fermer(){
-    document.getElementById("popup").style.display="none";
-}
-
-</script>
+    <!-- Le fonctionnement du site -->
+    <script src="script.js"></script>
 
 </body>
+
 </html>
