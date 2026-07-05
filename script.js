@@ -43,6 +43,7 @@ for (let i = 0; i < nombreEtoiles; i++) {
         document.getElementById("texte-poeme").textContent = poemes[i].texte;
 
         document.getElementById("popup").style.display = "block";
+        document.getElementById("voile").style.opacity = "1";
 
         star.classList.add("lu");
 
@@ -58,5 +59,6 @@ for (let i = 0; i < nombreEtoiles; i++) {
 function fermer() {
 
     document.getElementById("popup").style.display = "none";
+    document.getElementById("voile").style.opacity = "0";
 
 }
