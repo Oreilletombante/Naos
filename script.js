@@ -10,7 +10,6 @@ if (!ciel) {
     };
 }
 
-
 // ================= ÉTOILES DE FOND =================
 
 for (let i = 0; i < 90; i++) {
@@ -18,14 +17,12 @@ for (let i = 0; i < 90; i++) {
     let star = document.createElement("div");
     star.classList.add("etoile", "normal");
 
-    // Première visite : création des positions
     if (!ciel.fond[i]) {
 
         ciel.fond[i] = {
 
             top: Math.random() * 100,
             left: Math.random() * 100,
-
             duree: 2 + Math.random() * 4,
             delai: Math.random() * 5
 
@@ -40,9 +37,7 @@ for (let i = 0; i < 90; i++) {
     star.style.animationDelay = ciel.fond[i].delai + "s";
 
     document.body.appendChild(star);
-
 }
-
 
 // ================= ÉTOILES DES POÈMES =================
 
@@ -53,30 +48,50 @@ for (let i = 0; i < nombreEtoiles; i++) {
     let star = document.createElement("div");
     star.classList.add("etoile", "poeme");
 
-    // Première visite : création des positions
     if (!ciel.poemes[i]) {
 
+        let positionValide = false;
         let top;
         let left;
 
-        do {
+        while (!positionValide) {
 
             top = 10 + Math.random() * 80;
             left = 10 + Math.random() * 80;
 
-        } while (left > 70 && top < 30);
+            // Évite la lune
+            if (left > 70 && top < 30) {
+                continue;
+            }
+
+            positionValide = true;
+
+            // Vérifie la distance avec les étoiles déjà placées
+            for (const autre of ciel.poemes) {
+
+                if (!autre) continue;
+
+                const dx = left - autre.left;
+                const dy = top - autre.top;
+
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 15) {
+                    positionValide = false;
+                    break;
+                }
+            }
+        }
 
         ciel.poemes[i] = {
             top: top,
             left: left
         };
-
     }
 
     star.style.top = ciel.poemes[i].top + "vh";
     star.style.left = ciel.poemes[i].left + "vw";
 
-    // Si le poème a déjà été lu
     if (ciel.lus[i]) {
         star.classList.add("lu");
     }
@@ -86,24 +101,29 @@ for (let i = 0; i < nombreEtoiles; i++) {
         document.getElementById("titre-poeme").textContent = poemes[i].titre;
         document.getElementById("texte-poeme").textContent = poemes[i].texte;
         document.getElementById("date-poeme").textContent = poemes[i].date;
-        
+
+const popup = document.getElementById("popup");
+
+document.getElementById("titre-poeme").textContent = poemes[i].titre;
+document.getElementById("texte-poeme").textContent = poemes[i].texte;
+document.getElementById("date-poeme").textContent = poemes[i].date;
+
+popup.style.display = "block";
+
+requestAnimationFrame(() => {
+    popup.scrollTop = 0;
+});
+
+
         const voile = document.getElementById("voile");
-
-document.getElementById("popup").style.display = "block";
-
-voile.style.opacity = "1";
-voile.style.pointerEvents = "auto";
-
-voile.onclick = fermer;
-
-        document.getElementById("popup").scrollTop = 0;
+        voile.style.opacity = "1";
+        voile.style.pointerEvents = "auto";
+        voile.onclick = fermer;
 
         star.classList.add("lu");
 
-        // On mémorise que ce poème a été lu
         ciel.lus[i] = true;
 
-        // Sauvegarde immédiate
         localStorage.setItem(
             "naos-ciel",
             JSON.stringify(ciel)
@@ -112,17 +132,14 @@ voile.onclick = fermer;
     });
 
     document.body.appendChild(star);
-
 }
 
-
-// ================= SAUVEGARDE DU CIEL =================
+// ================= SAUVEGARDE =================
 
 localStorage.setItem(
     "naos-ciel",
     JSON.stringify(ciel)
 );
-
 
 // ================= FERMETURE =================
 
